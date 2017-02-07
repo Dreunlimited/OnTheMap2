@@ -7,15 +7,29 @@
 //
 
 import UIKit
+import MapKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let loginSave = UserDefaults.standard
+    var listLocation = [StudentLocation]()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if loginSave.string(forKey: "loggedIn") != nil {
+             let vc = storyboard.instantiateViewController(withIdentifier: "tabController") as? UITabBarController
+            window?.rootViewController = vc
+            
+        } else {
+           let vc = storyboard.instantiateViewController(withIdentifier: "login") as? LoginViewController
+            window?.rootViewController = vc
+            
+        }
+        
         return true
     }
 
