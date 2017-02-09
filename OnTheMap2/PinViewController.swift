@@ -16,6 +16,8 @@ class PinViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mediaURL: UITextField!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var mapview: MKMapView!
+    var lat:Double? = nil
+    var long:Double? = nil
     
     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
 
@@ -47,7 +49,8 @@ class PinViewController: UIViewController, MKMapViewDelegate {
         }
         activity.startAnimating()
         alertLabel.text = ""
-        let address = addressField.text, url = mediaURL.text
+        
+        let address = addressField.text
         let geo = CLGeocoder()
         
         geo.geocodeAddressString(address!) { (placemarks, error) in
@@ -60,6 +63,8 @@ class PinViewController: UIViewController, MKMapViewDelegate {
             self.mapview.setRegion(
                 MKCoordinateRegionMakeWithDistance(mp.coordinate, 1000, 1000),
                 animated: true)
+            self.lat = mp.coordinate.latitude
+            self.long = mp.coordinate.longitude
             self.mapview.isHidden = false
             self.addressField.isHidden = true
             self.mediaURL.isHidden = true
@@ -78,5 +83,37 @@ class PinViewController: UIViewController, MKMapViewDelegate {
     }
 
     @IBAction func postButton(_ sender: Any) {
+        self.activity.startAnimating()
+        UdacityClient.sharedInstance().getUserProfile { (sucess, results, error) in
+            if sucess == true {
+                let first = results!["first_name"] as! String
+                let last = results!["last_name"] as! String
+            ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
+            })
+                if error != nil {
+                    self.alertLabel.text = error
+                } else {
+                    self.activity.stopAnimating()
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
+            } else {
+                self.activity.stopAnimating()
+                self.alertLabel.text = error
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

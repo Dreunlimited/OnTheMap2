@@ -14,10 +14,10 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var debugTextLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    let userKey = UserDefaults()
+   
     
     let loginSave = UserDefaults.standard
-     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
+    let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,10 +47,9 @@ class LoginViewController: UIViewController {
             performUIUpdatesOnMain {
                 if sucess {
                     self.activity.stopAnimating()
-                    print("UserID \(userID)")
-//                    self.userKey.set(userID!, forKey: "key")
                     self.performSegue(withIdentifier: "loginToMain", sender: self)
-                    //self.loginSave.set(true, forKey: "loggedIn")
+                    self.loginSave.set(true, forKey: "loggedIn")
+                    
                 } else {
                     self.displayError(errorString)
                 }

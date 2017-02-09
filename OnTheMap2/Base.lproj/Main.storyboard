@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -137,15 +136,11 @@
                                                 <action selector="logoutButtonTouched:" destination="Eup-mQ-SY2" id="Zm8-Lt-X3D"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem systemItem="refresh" id="X9h-Br-3k4"/>
-                                            <barButtonItem image="pin" id="hGB-DE-Z8P">
-                                                <connections>
-                                                    <action selector="addPinButtonTouched:" destination="Eup-mQ-SY2" id="HGM-9v-ZYg"/>
-                                                    <segue destination="iNx-FI-zQl" kind="show" id="EVr-f8-7is"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" image="pin" id="hGB-DE-Z8P">
+                                            <connections>
+                                                <segue destination="iNx-FI-zQl" kind="show" id="EVr-f8-7is"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -158,7 +153,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hOF-XI-gri" id="Kga-8m-obI">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jessica Something" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Cy-zj-sK4">
@@ -221,24 +216,33 @@
                                 <rect key="frame" x="0.0" y="61" width="375" height="271"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your pin location" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LCW-uJ-K7y">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your pin location" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LCW-uJ-K7y">
                                 <rect key="frame" x="54" y="181" width="255" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="255" id="Nuf-5d-GBb"/>
+                                    <constraint firstAttribute="height" constant="30" id="yWb-2I-4Ae"/>
+                                </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter web url" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vc1-bG-SaL">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter web url" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vc1-bG-SaL">
                                 <rect key="frame" x="54" y="242" width="255" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="4wM-wN-GL3"/>
+                                    <constraint firstAttribute="width" constant="255" id="dNb-Iv-lqT"/>
+                                </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Yw-HY-PaF">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Yw-HY-PaF">
                                 <rect key="frame" x="54" y="296" width="255" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="255" id="Qho-g9-306"/>
+                                    <constraint firstAttribute="height" constant="30" id="VDD-KZ-Kyt"/>
+                                </constraints>
                                 <state key="normal" title="Submit">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -255,6 +259,14 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.62352941179999999" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="LCW-uJ-K7y" firstAttribute="centerX" secondItem="1LY-0M-O0B" secondAttribute="centerX" id="Aw6-Pr-yH5"/>
+                            <constraint firstItem="Vc1-bG-SaL" firstAttribute="centerX" secondItem="1LY-0M-O0B" secondAttribute="centerX" id="G4X-rI-afm"/>
+                            <constraint firstItem="1Yw-HY-PaF" firstAttribute="centerX" secondItem="1LY-0M-O0B" secondAttribute="centerX" id="bfp-CT-Tad"/>
+                            <constraint firstItem="1Yw-HY-PaF" firstAttribute="top" secondItem="Vc1-bG-SaL" secondAttribute="bottom" constant="24" id="dMX-VQ-34s"/>
+                            <constraint firstItem="Vc1-bG-SaL" firstAttribute="top" secondItem="LCW-uJ-K7y" secondAttribute="bottom" constant="31" id="hSG-ZX-efV"/>
+                            <constraint firstItem="LCW-uJ-K7y" firstAttribute="top" secondItem="hjZ-Br-Yra" secondAttribute="bottom" constant="117" id="pXO-Ma-VgM"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Add a pin" id="1IL-Dy-Hse">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="83L-K8-0AA">
@@ -262,7 +274,7 @@
                                 <action selector="closeButton:" destination="4Na-gb-ZEE" id="Mrw-aM-3l3"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="XUa-hB-0FE">
+                        <barButtonItem key="rightBarButtonItem" title="Pin" id="XUa-hB-0FE">
                             <connections>
                                 <action selector="postButton:" destination="4Na-gb-ZEE" id="Pzj-Xq-hBA"/>
                             </connections>
@@ -305,18 +317,11 @@
                                                 <action selector="logoutButtonTouched:" destination="Iib-Hp-RZf" id="yTg-Db-Eb5"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem systemItem="refresh" id="h9A-MJ-MOX">
-                                                <connections>
-                                                    <action selector="loadData:" destination="Iib-Hp-RZf" id="v1I-7e-oyW"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem image="pin" id="vvh-CW-BBr">
-                                                <connections>
-                                                    <segue destination="iNx-FI-zQl" kind="show" id="APi-fl-ART"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" image="pin" id="vvh-CW-BBr">
+                                            <connections>
+                                                <segue destination="iNx-FI-zQl" kind="show" id="APi-fl-ART"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -379,6 +384,6 @@
         <image name="pin" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="EVr-f8-7is"/>
+        <segue reference="APi-fl-ART"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -45,8 +45,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let urlString = studentInforomation[indexPath.row]
         if let url = URL(string: urlString.mediaURL!) {
@@ -69,16 +67,14 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         UdacityClient.sharedInstance().taskForDelete(Udacity.UDACITY.BASEURL) { (results, error) in
             performUIUpdatesOnMain {
                 guard error == nil else {return}
-                print("R \(results)")
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
                 self.present(loginVC, animated: true, completion: nil)
                 self.loginSave.removeObject(forKey: "loggedIn")
+                UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")
             }
         }
 
-    }
-    @IBAction func addPinButtonTouched(_ sender: Any) {
     }
 
 }

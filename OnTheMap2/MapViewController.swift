@@ -24,6 +24,7 @@ class MapViewController: UIViewController, MKMapViewDelegate{
         mapview.mapType = .standard
         mapview.isPitchEnabled = true
         mapview.isZoomEnabled = true
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,15 +102,6 @@ class MapViewController: UIViewController, MKMapViewDelegate{
         }
     }
     
-    
-    @IBAction func loadData(_ sender: Any) {
-        
-    }
-    
-    
-
-    
-    
     @IBAction func logoutButtonTouched(_ sender: Any) {
         UdacityClient.sharedInstance().taskForDelete(Udacity.UDACITY.BASEURL) { (results, error) in
             performUIUpdatesOnMain {
@@ -119,10 +111,10 @@ class MapViewController: UIViewController, MKMapViewDelegate{
                 let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
                 self.present(loginVC, animated: true, completion: nil)
                 self.loginSave.removeObject(forKey: "loggedIn")
+                UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")
             }
         }
     }
-    @IBAction func addPinButtonTouched(_ sender: Any) {
-    }
+    
 
 }

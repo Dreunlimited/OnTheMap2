@@ -20,7 +20,7 @@ struct StudentLocation {
     var latitude: CLLocationDegrees?
     var longitude:CLLocationDegrees?
     var location: CLLocationCoordinate2D?
-   
+    
     init(dictionary:[String:AnyObject]) {
         objectId = dictionary[Parse.JSONResponseKeys.objectId] as? String
         uniqueKey = dictionary[Parse.JSONResponseKeys.uniqueKey] as? String
@@ -41,7 +41,7 @@ struct StudentLocation {
         } else {
             latitude = 0.0
         }
-            
+        
         if let long = dictionary[Parse.JSONResponseKeys.longitude] as? Double {
             longitude = long
         } else {
@@ -57,13 +57,13 @@ struct StudentLocation {
         
         
         for location in results {
-    
-            studentLocations.append(StudentLocation(dictionary: location))
             
+            studentLocations.append(StudentLocation(dictionary: location))
+            appDel?.listLocation = studentLocations.flatMap { $0 }
         }
-        appDel?.listLocation = studentLocations.flatMap { $0 }
+        
         return studentLocations
-    
+        
     }
 }
 

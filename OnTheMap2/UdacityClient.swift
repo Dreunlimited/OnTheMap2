@@ -39,6 +39,7 @@ class UdacityClient: NSObject {
                 sendError("No data was returned by the request!")
                 return
             }
+              
             self.convertDataToJson(data, completionHandlerForConvertData: completionHandlerForGet)
         }
         task.resume()
@@ -55,7 +56,8 @@ class UdacityClient: NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = httpBody.data(using: String.Encoding.utf8)
-        print("\(httpBody)")
+        
+        
         let task = session.dataTask(with: request) { (data, response, error) in
             
             func sendError(_ error: String) {
@@ -71,6 +73,7 @@ class UdacityClient: NSObject {
                 sendError("No data was returned by the request!")
                 return
             }
+          
             self.convertDataToJson(data, completionHandlerForConvertData: completionHandlerForPOST)
         }
         task.resume()
@@ -92,7 +95,6 @@ class UdacityClient: NSObject {
         }
         
         let task = session.dataTask(with: request) { (data, response, error) in
-            print("http \(response)")
             func sendError(_ error: String) {
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForPOST(false, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
@@ -108,9 +110,6 @@ class UdacityClient: NSObject {
         }
             task.resume()
     }
-    
-    
-    
     
     func convertDataToJson(_ data: Data, completionHandlerForConvertData:(_ results:AnyObject?, _ error:NSError?)-> Void) {
         

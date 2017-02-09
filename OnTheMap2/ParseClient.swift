@@ -45,16 +45,14 @@ class ParseClient: NSObject {
         task.resume()
     }
     
-    func taskForPost(_ method:String,_ parameters:[String:AnyObject],completionHandlerForPOST: @escaping(_ result:AnyObject?,_ error:NSError?)-> Void) {
-        
-        
-        let json = try? JSONSerialization.data(withJSONObject: parameters)
+    func taskForPost(_ method:String,_ httpBody: String,completionHandlerForPOST: @escaping(_ result:AnyObject?,_ error:NSError?)-> Void) {
         
         var request = URLRequest(url: URL(string: method)!)
         request.httpMethod = "POST"
         request.addValue(Parse.ParseParameterKeys.appId, forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue(Parse.ParseParameterKeys.apiKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.httpBody = json
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = httpBody.data(using: String.Encoding.utf8)
         
         let task = session.dataTask(with: request) { (data, response, error) in
             
@@ -92,6 +90,7 @@ class ParseClient: NSObject {
         
         completionHandlerForConvertData(parsedResult, nil)
     }
+   
 
     class func sharedInstance() -> ParseClient {
         struct Singleton {

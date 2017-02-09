@@ -13,7 +13,7 @@ struct Parse {
     
     struct PARSE {
         static let ApiScheme = "https://"
-        static let ApiHost = "parse.udacity.com/parse/classes/StudentLocation?"
+        static let ApiHost = "parse.udacity.com/parse/classes/StudentLocation?limit=100&order=-updatedAt"
         static let BASEURL = ApiScheme + ApiHost
     }
     

@@ -13,9 +13,9 @@ struct Udacity {
     static let helper = Udacity()
     
     struct UDACITY {
-        static let ApiScheme = "https://"
+        static let ApiScheme = "https://www."
         static let ApiHost = "udacity.com/api/session"
-        static let ApiUser = "udacity.com/api/user/"
+        static let ApiUser = "udacity.com/api/users/"
         static let BASEURL = ApiScheme + ApiHost
         static let UserBASEURL = ApiScheme + ApiUser
     }

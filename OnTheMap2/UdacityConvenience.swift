@@ -21,30 +21,31 @@ extension UdacityClient {
             } else {
                 
                 if let account = results?["account"] as? [String:AnyObject] {
-                   let key = account["key"] as? String
-                    print(key)
-                    
+                   let key = account[Udacity.URLKeys.UserID] as! String
+                    self.userKey.set(key, forKey: "key")
                     completionHandlerForAuth(true, nil, key)
                 }
             }
             
         }
-        
-        
     }
     
     func getUserProfile(completionHandler: @escaping (_ sucess: Bool, _ results:[String:AnyObject]?, _ error: String? )-> Void) {
         
         let key = userKey.object(forKey: "key")
-        let url = "\(Udacity.UDACITY.BASEURL)/\(key!)"
-        
+        let url = "\(Udacity.UDACITY.UserBASEURL)\(key!)"
         let _ = taskForGet(url, parameters: nil) { (results, error) in
-            if let error = error {
-                print(error)
+            if error != nil {
                 completionHandler(false, nil, "Error getting profile")
             } else {
-                
-                completionHandler(true, results as! [String : AnyObject]?, nil)
+                if let user = results?["user"] as? [String:AnyObject] {
+                    let firstName = user["first_name"] as! String
+                    let lastName = user["last_name"] as! String
+                    
+                    let userInfo = ["first_name":firstName, "last_name":lastName]
+                    completionHandler(true, userInfo as [String : AnyObject]?, nil)
+
+                }
             }
         }
         
