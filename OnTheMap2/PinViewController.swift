@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PinViewController: UIViewController, MKMapViewDelegate {
+class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var postButton: UIBarButtonItem!
     @IBOutlet weak var alertLabel: UILabel!
     @IBOutlet weak var addressField: UITextField!
@@ -21,14 +21,14 @@ class PinViewController: UIViewController, MKMapViewDelegate {
     
     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
 
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapview.delegate = self
         mapview.isHidden = true
         mapview.isPitchEnabled = true
         mapview.isZoomEnabled = true
-        
+        addressField.delegate = self
         postButton.isEnabled = false
         
         self.activity.layer.cornerRadius = 10
@@ -38,14 +38,19 @@ class PinViewController: UIViewController, MKMapViewDelegate {
         self.view.addSubview(activity)
         
 }
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     @IBAction func submitButton(_ sender: Any) {
         guard addressField.text != "" && mediaURL.text != "" else {
-            alertLabel.text = "Please enter an address and link" ; return
+            alert("Please enter an address and link", "Try again", self)
+            return
         }
         activity.startAnimating()
         alertLabel.text = ""
@@ -54,7 +59,10 @@ class PinViewController: UIViewController, MKMapViewDelegate {
         let geo = CLGeocoder()
         
         geo.geocodeAddressString(address!) { (placemarks, error) in
-            guard let placemarks = placemarks else { self.alertLabel.text = "Error with coding your address" ; return }
+            guard let placemarks = placemarks else {
+                self.activity.stopAnimating()
+                alert("Please enter your address again", "Try again", self)
+                return }
             self.mapview.showsUserLocation = false
             let p = placemarks[0]
             let mp = MKPlacemark(placemark:p)
@@ -91,7 +99,7 @@ class PinViewController: UIViewController, MKMapViewDelegate {
             ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
             })
                 if error != nil {
-                    self.alertLabel.text = error
+                    alert("There was error posting your pin", "Try again", self)
                 } else {
                     self.activity.stopAnimating()
                     self.dismiss(animated: true, completion: nil)

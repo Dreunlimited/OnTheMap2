@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var debugTextLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
@@ -21,7 +21,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       self.passwordField.delegate = self
+       self.emailField.delegate = self
        self.activity.layer.cornerRadius = 10
        self.activity.frame = activity.frame.insetBy(dx: -10, dy: -10)
        self.activity.center = self.view.center
@@ -29,14 +30,28 @@ class LoginViewController: UIViewController {
        self.view.addSubview(activity)
 }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+    }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     @IBAction func loginButtonTouched(_ sender: Any) {
         self.activity.startAnimating()
         
         guard emailField.text != "" && passwordField.text != "" else {
             self.activity.stopAnimating()
-            UIView.animate(withDuration: 0.03, animations: {
-                self.displayError("Enter an email and password")
-            })
+            alert("Fill in both email and password", "Try again", self)
             
             return
         }
@@ -51,8 +66,10 @@ class LoginViewController: UIViewController {
                     self.loginSave.set(true, forKey: "loggedIn")
                     
                 } else {
-                    self.displayError(errorString)
+                    self.activity.stopAnimating()
+                    alert("Please check your email or password again", "Try again", self)
                 }
+
             }
         }
         

@@ -29,7 +29,7 @@ class ParseClient: NSObject {
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForGET(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
             }
-            
+          
             guard (error == nil) else {
                 sendError("There was an error with your request: \(error)")
                 return

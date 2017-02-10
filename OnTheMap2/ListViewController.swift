@@ -14,17 +14,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var tableView: UITableView!
      let loginSave = UserDefaults.standard
-    
-    
-    var studentInforomation = [StudentLocation]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        let appDel = UIApplication.shared.delegate as? AppDelegate
-        
-        studentInforomation = (appDel?.listLocation)!
+    
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -32,12 +28,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentInforomation.count
+        return StudentDataSource.sharedInstance.studentData.count
+        
     }
     
     func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath) as? ListTableViewCell
-        let fullName = studentInforomation[indexPath.row]
+        let fullName = StudentDataSource.sharedInstance.studentData[indexPath.row]
         
         cell?.nameLabel.text = ("\(fullName.firstName!) \(fullName.lastName!)")
         
@@ -46,7 +43,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let urlString = studentInforomation[indexPath.row]
+        let urlString = StudentDataSource.sharedInstance.studentData[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
         if let url = URL(string: urlString.mediaURL!) {
             if url.scheme == nil {
                 let newUrlString = "http://\(url)"
@@ -67,6 +65,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         UdacityClient.sharedInstance().taskForDelete(Udacity.UDACITY.BASEURL) { (results, error) in
             performUIUpdatesOnMain {
                 guard error == nil else {return}
+                self.dismiss(animated: true, completion: nil)
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
                 self.present(loginVC, animated: true, completion: nil)

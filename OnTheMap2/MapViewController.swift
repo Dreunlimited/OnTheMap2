@@ -28,11 +28,12 @@ class MapViewController: UIViewController, MKMapViewDelegate{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-
+        mapview.removeAnnotations(mapview.annotations)
         mapViewDidFinishLoadingMap(mapview)
         ParseClient.sharedInstance().getStudentLocation { (locations, error) in
             guard error == nil else {
                 print(error!)
+                alert("There was an error downloading the data", "Try again", self)
                 return
             }
             var annotations = [MKPointAnnotation]()
@@ -45,6 +46,7 @@ class MapViewController: UIViewController, MKMapViewDelegate{
                 annotation.subtitle = location.mediaURL
                 annotations.append(annotation)
                 self.mapview.addAnnotations(annotations)
+                
             }
             
         }
@@ -98,7 +100,7 @@ class MapViewController: UIViewController, MKMapViewDelegate{
     
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         performUIUpdatesOnMain {
-            self.mapview.isHidden = false
+          self.mapview.isHidden = false
         }
     }
     
@@ -107,9 +109,11 @@ class MapViewController: UIViewController, MKMapViewDelegate{
             performUIUpdatesOnMain {
                 
                 guard error == nil else { print("Error with logging out \(error)") ; return}
+                self.dismiss(animated: true, completion: nil)
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
                 self.present(loginVC, animated: true, completion: nil)
+              
                 self.loginSave.removeObject(forKey: "loggedIn")
                 UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")
             }

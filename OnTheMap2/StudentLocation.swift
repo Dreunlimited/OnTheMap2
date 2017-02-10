@@ -51,7 +51,7 @@ struct StudentLocation {
     }
     
     static func locationsFromResults(_ results:[[String:AnyObject]]!)-> [StudentLocation] {
-        let appDel = UIApplication.shared.delegate as? AppDelegate
+       
         
         var studentLocations = [StudentLocation]()
         
@@ -59,7 +59,7 @@ struct StudentLocation {
         for location in results {
             
             studentLocations.append(StudentLocation(dictionary: location))
-            appDel?.listLocation = studentLocations.flatMap { $0 }
+            StudentDataSource.sharedInstance.studentData.append(StudentLocation(dictionary: location))
         }
         
         return studentLocations

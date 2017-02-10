@@ -18,19 +18,18 @@ extension ParseClient {
             
             if let error = error {
                 completionHandlerForLocation(nil, error)
-                
             } else {
-                
-                if let results = results?[Parse.JSONResponseKeys.studentResults] as? [[String:AnyObject]]! {
-                    let locations = StudentLocation.locationsFromResults(results!)
+                if let results = results?[Parse.JSONResponseKeys.studentResults] as? [[String:AnyObject]] {
+                    let locations = StudentLocation.locationsFromResults(results)
                     completionHandlerForLocation(locations, nil)
+                    
                 } else {
-                    completionHandlerForLocation(nil, NSError(domain: "getStudentLocationparsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse getStudentLocationData"]))
+                    completionHandlerForLocation(nil, NSError(domain: "getStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse getStudentLocationData"]))
                 }
             }
             
-            
         }
+        
     }
     
     func postStudentLocation(_ uniqueKey:String, _ firstName:String, _ lastName:String, _ mapString:String, _ mediaURL:String, _ latitude: Double, _ longitude: Double, completionHandlerForPostLocation: @escaping(_ results:AnyObject?, _ error:String?)-> Void) {
