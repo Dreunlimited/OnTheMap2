@@ -65,10 +65,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         UdacityClient.sharedInstance().taskForDelete(Udacity.UDACITY.BASEURL) { (results, error) in
             performUIUpdatesOnMain {
                 guard error == nil else {return}
-                self.dismiss(animated: true, completion: nil)
-                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
-                self.present(loginVC, animated: true, completion: nil)
+                self.tabBarController?.dismiss(animated: true, completion: nil)
                 self.loginSave.removeObject(forKey: "loggedIn")
                 UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")
             }

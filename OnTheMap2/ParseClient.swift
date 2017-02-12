@@ -29,7 +29,7 @@ class ParseClient: NSObject {
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForGET(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
             }
-          
+            
             guard (error == nil) else {
                 sendError("There was an error with your request: \(error)")
                 return
@@ -63,13 +63,14 @@ class ParseClient: NSObject {
             }
             
             guard (error == nil) else {
-                sendError("There was an error with your request: \(error)")
+                sendError("There was an error with your request 2: \(error)")
                 return
             }
             guard let data = data else {
                 sendError("No data was returned by the request!")
                 return
             }
+            print("response \(response)")
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
         }
         task.resume()

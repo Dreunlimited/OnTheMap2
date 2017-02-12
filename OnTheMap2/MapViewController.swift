@@ -109,10 +109,10 @@ class MapViewController: UIViewController, MKMapViewDelegate{
             performUIUpdatesOnMain {
                 
                 guard error == nil else { print("Error with logging out \(error)") ; return}
-                self.dismiss(animated: true, completion: nil)
-                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                let loginVC = storyBoard.instantiateViewController(withIdentifier: "login")
-                self.present(loginVC, animated: true, completion: nil)
+                
+                self.tabBarController?.dismiss(animated: true, completion: {
+                   
+                })
               
                 self.loginSave.removeObject(forKey: "loggedIn")
                 UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")

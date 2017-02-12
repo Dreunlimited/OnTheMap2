@@ -33,11 +33,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        passwordField.text = ""
+        emailField.text = ""
+        
+        subscribeToKeyboardNotifications()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
+        unsubscribeFromKeyboardNotifications()
+
     }
     
     
@@ -80,6 +87,45 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let vc = SFSafariViewController(url: url!)
         present(vc, animated: true, completion: nil)
     }
+    
+    
+    
+    func subscribeToKeyboardNotifications() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name:  .UIKeyboardWillHide, object: nil)
+    }
+    
+    func unsubscribeFromKeyboardNotifications() {
+        
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillHide(_ notification:Notification) {
+        if passwordField.isFirstResponder {
+            view.frame.origin.y = 0.0
+        }
+        
+    }
+    
+    func keyboardWillShow(_ notification:Notification) {
+        if passwordField.isFirstResponder {
+            view.frame.origin.y = getKeyboardHeight( notification: notification as NSNotification ) * -1
+        }
+        
+    }
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo!
+        let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        if passwordField.isFirstResponder {
+            return keyboardSize.cgRectValue.height
+        } else {
+            return 0
+        }
+    }
+
     
     func displayError(_ errorString: String?) {
         if let errorString = errorString {

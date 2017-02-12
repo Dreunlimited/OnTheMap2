@@ -17,15 +17,15 @@ extension UdacityClient {
         let _ = taskForPost(Udacity.UDACITY.BASEURL, httpBody) { (results, error) in
             
             if let account = results?["account"] as? [String:AnyObject] {
-                let key = account[Udacity.URLKeys.UserID] as! String
-                self.userKey.set(key, forKey: "key")
-                completionHandlerForAuth(true, nil, key)
-            } else {
-                completionHandlerForAuth(false, "Error returning key", nil)
+                   let key = account[Udacity.URLKeys.UserID] as! String
+                    self.userKey.set(key, forKey: "key")
+                    completionHandlerForAuth(true, nil, key)
+                } else {
+                     completionHandlerForAuth(false, "Error returning key", nil)
+                }
             }
+            
         }
-        
-    }
     
     
     func getUserProfile(completionHandler: @escaping (_ sucess: Bool, _ results:[String:AnyObject]?, _ error: String? )-> Void) {
@@ -33,7 +33,8 @@ extension UdacityClient {
         let key = userKey.object(forKey: "key")
         let url = "\(Udacity.UDACITY.UserBASEURL)\(key!)"
         let _ = taskForGet(url, parameters: nil) { (results, error) in
-            if error != nil {
+            if let results = results?["error"] as? [String:AnyObject] {
+                print("hey")
                 completionHandler(false, nil, "Error getting profile")
             } else {
                 if let user = results?["user"] as? [String:AnyObject] {
@@ -42,7 +43,7 @@ extension UdacityClient {
                     
                     let userInfo = ["first_name":firstName, "last_name":lastName]
                     completionHandler(true, userInfo as [String : AnyObject]?, nil)
-                    
+
                 }
             }
         }

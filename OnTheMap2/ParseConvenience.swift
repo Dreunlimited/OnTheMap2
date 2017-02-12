@@ -36,12 +36,11 @@ extension ParseClient {
         
         let httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}"
         
-        let _ = taskForPost(Parse.PARSE.BASEURL, httpBody) { (resuts, error) in
-            if error != nil {
+        let _ = taskForPost(Parse.PARSE.BASEURL, httpBody) { (results, error) in
+            if let results = results?["error"] as? [String:AnyObject] {
                 completionHandlerForPostLocation(nil, "Error posting location")
             } else {
-                print(httpBody)
-                completionHandlerForPostLocation(resuts, nil)
+                completionHandlerForPostLocation(results, nil)
             }
         }
     }

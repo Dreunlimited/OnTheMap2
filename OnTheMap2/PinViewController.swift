@@ -31,21 +31,12 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
         addressField.delegate = self
         postButton.isEnabled = false
         
-        self.activity.layer.cornerRadius = 10
-        self.activity.frame = activity.frame.insetBy(dx: -10, dy: -10)
-        self.activity.center = self.view.center
-        self.activity.tag = 1001
-        self.view.addSubview(activity)
-        
+        activity.layer.cornerRadius = 10
+        activity.frame = activity.frame.insetBy(dx: -10, dy: -10)
+        activity.center = self.view.center
+        activity.tag = 1001
+        view.addSubview(activity)
 }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     @IBAction func submitButton(_ sender: Any) {
         guard addressField.text != "" && mediaURL.text != "" else {
@@ -99,17 +90,24 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
             ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
             })
                 if error != nil {
-                    alert("There was error posting your pin", "Try again", self)
+                    alert("There was error posting your pin 1", "Try again", self)
                 } else {
                     self.activity.stopAnimating()
                     self.dismiss(animated: true, completion: nil)
                 }
                 
-            } else {
+            } else if sucess == false {
                 self.activity.stopAnimating()
                 self.alertLabel.text = error
+                alert("There was error posting your pin", "Try again", self)
             }
         }
+    }
+    
+        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

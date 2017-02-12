@@ -32,7 +32,7 @@ class UdacityClient: NSObject {
             }
             
             guard (error == nil) else {
-                sendError("There was an error with your request: \(error)")
+                sendError("There was an error with your request 2: \(error)")
                 return
             }
             guard let data = data else {
