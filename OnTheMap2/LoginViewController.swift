@@ -90,8 +90,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     self.loginSave.set(true, forKey: "loggedIn")
                     
                 } else {
-                    self.activity.stopAnimating()
-                    alert("Please check your email or password again", "Try again", self)
+                        self.activity.stopAnimating()
+                        alert(errorString!, "Try again", self)
                 }
 
             }

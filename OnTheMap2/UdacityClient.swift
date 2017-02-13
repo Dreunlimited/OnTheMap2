@@ -28,13 +28,12 @@ class UdacityClient: NSObject {
         let task = session.dataTask(with: request) { (data, response, error) in
             
             func sendError(_ error: String) {
-                print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForGet(nil, NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
             }
             
             guard (error == nil) else {
-                sendError("There was an error with your request 2: \(error)")
+                sendError("There was an error with your request : \(error)")
                 return
             }
             guard let data = data else {
@@ -69,6 +68,7 @@ class UdacityClient: NSObject {
             
             guard (error == nil) else {
                 sendError("There was an error with your request: \(error)")
+                
                 return
             }
             guard let data = data else {

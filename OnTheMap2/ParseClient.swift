@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ReachabilitySwift
+
 
 class ParseClient: NSObject {
     

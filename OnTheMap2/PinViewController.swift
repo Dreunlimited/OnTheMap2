@@ -20,7 +20,7 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
     var long:Double? = nil
     
     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
         activity.center = self.view.center
         activity.tag = 1001
         view.addSubview(activity)
-}
+    }
     
     @IBAction func submitButton(_ sender: Any) {
         guard addressField.text != "" && mediaURL.text != "" else {
@@ -70,41 +70,52 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
             self.submitButton.isHidden = true
             self.postButton.isEnabled = true
             self.activity.stopAnimating()
-
+            
         }
     }
     @IBAction func closeButton(_ sender: Any) {
-        self.dismiss(animated: true) { 
+        self.dismiss(animated: true) {
             self.addressField.text = ""
             self.mediaURL.text = ""
             
         }
     }
-
+    
     @IBAction func postButton(_ sender: Any) {
+        performUIUpdatesOnMain {
         self.activity.startAnimating()
+        }
+        
         UdacityClient.sharedInstance().getUserProfile { (sucess, results, error) in
-            if sucess == true {
+            
+             if sucess {
+                
                 let first = results!["first_name"] as! String
                 let last = results!["last_name"] as! String
-            ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
-            })
-                if error != nil {
-                    alert("There was error posting your pin 1", "Try again", self)
-                } else {
-                    self.activity.stopAnimating()
-                    self.dismiss(animated: true, completion: nil)
-                }
                 
-            } else if sucess == false {
-                self.activity.stopAnimating()
-                self.alertLabel.text = error
-                alert("There was error posting your pin", "Try again", self)
+                ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
+                    performUIUpdatesOnMain {
+                        if error != nil {
+                            alert(error!, "Try again", self)
+                        } else {
+                            self.activity.stopAnimating()
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    }
+                })
+
+             } else {
+                performUIUpdatesOnMain {
+                    self.activity.stopAnimating()
+                    alert(error!, "Try again", self)
+                }
+
             }
+            
         }
+        
     }
     
-        
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

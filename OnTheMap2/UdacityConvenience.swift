@@ -28,7 +28,7 @@ extension UdacityClient {
                             self.userKey.set(key, forKey: "key")
                             completionHandlerForAuth(true, nil, key)
                         } else {
-                            completionHandlerForAuth(false, "Error returning key", nil)
+                            completionHandlerForAuth(false, "Please check your email or password again", nil)
                         }
                     }
                 } else {
@@ -37,7 +37,7 @@ extension UdacityClient {
         }
         reachability.whenUnreachable = { reachability in
             performUIUpdatesOnMain {
-                completionHandlerForAuth(false, nil, nil)
+                completionHandlerForAuth(false, "There's a lost in internet connection", nil)
             }
         }
         
@@ -53,16 +53,15 @@ extension UdacityClient {
     
     func getUserProfile(completionHandler: @escaping (_ sucess: Bool, _ results:[String:AnyObject]?, _ error: String? )-> Void) {
         
-        
         reachability.whenReachable = { reachability in
-          
+            
             performUIUpdatesOnMain {
                 if reachability.isReachableViaWiFi {
                     
                     let key = self.userKey.object(forKey: "key")
                     let url = "\(Udacity.UDACITY.UserBASEURL)\(key!)"
                     let _ = self.taskForGet(url, parameters: nil) { (results, error) in
-                        if let results = results?["error"] as? [String:AnyObject] {
+                        if let _ = results?["error"] as? [String:AnyObject] {
                             completionHandler(false, nil, "Error getting profile")
                         } else {
                             if let user = results?["user"] as? [String:AnyObject] {
@@ -71,6 +70,7 @@ extension UdacityClient {
                                 
                                 let userInfo = ["first_name":firstName, "last_name":lastName]
                                 completionHandler(true, userInfo as [String : AnyObject]?, nil)
+                                
                                 
                             }
                         }
@@ -82,13 +82,14 @@ extension UdacityClient {
         }
         reachability.whenUnreachable = { reachability in
             performUIUpdatesOnMain {
-                completionHandler(false, nil, nil)
+                completionHandler(false, nil, "Lost of internet connection")
             }
         }
         
         do {
             try reachability.startNotifier()
         } catch {
+                print("Unable to start notifier")
         }
     }
     
