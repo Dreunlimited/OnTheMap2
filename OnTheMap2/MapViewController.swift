@@ -110,9 +110,7 @@ class MapViewController: UIViewController, MKMapViewDelegate{
                 
                 guard error == nil else { print("Error with logging out \(error)") ; return}
                 
-                self.tabBarController?.dismiss(animated: true, completion: {
-                   
-                })
+                self.tabBarController?.dismiss(animated: true, completion: nil)
               
                 self.loginSave.removeObject(forKey: "loggedIn")
                 UdacityClient.sharedInstance().userKey.removeObject(forKey: "key")

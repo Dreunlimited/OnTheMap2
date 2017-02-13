@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import ReachabilitySwift
 
 class UdacityClient: NSObject {
     
     let session = URLSession.shared
     let userKey = UserDefaults()
     var sessionID: String? = nil
+    let reachability = Reachability()!
     
     
     override init() {

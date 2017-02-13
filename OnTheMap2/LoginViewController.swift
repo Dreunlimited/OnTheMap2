@@ -8,9 +8,12 @@
 
 import UIKit
 import SafariServices
+import ReachabilitySwift
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
+    let reachability = Reachability()!
+    
     @IBOutlet weak var debugTextLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -28,6 +31,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
        self.activity.center = self.view.center
        self.activity.tag = 1001
        self.view.addSubview(activity)
+        
+//        reachability.whenUnreachable = { reachability in
+//        
+//            performUIUpdatesOnMain {
+//                print("Not reachable")
+//            }
+//        }
+//        
+//        do {
+//            try reachability.startNotifier()
+//            print("yes")
+//        } catch {
+//            print("Unable to start notifier")
+//        }
 }
     
     

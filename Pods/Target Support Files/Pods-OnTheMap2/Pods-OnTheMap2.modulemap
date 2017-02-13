@@ -1,0 +1,6 @@
+framework module Pods_OnTheMap2 {
+  umbrella header "Pods-OnTheMap2-umbrella.h"
+
+  export *
+  module * { export * }
+}
