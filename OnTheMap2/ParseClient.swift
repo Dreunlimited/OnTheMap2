@@ -13,6 +13,7 @@ import ReachabilitySwift
 class ParseClient: NSObject {
     
     let session = URLSession.shared
+
     
     override init() {
         super.init()

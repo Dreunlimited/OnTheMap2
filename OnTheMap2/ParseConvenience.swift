@@ -35,36 +35,17 @@ extension ParseClient {
     
     func postStudentLocation(_ uniqueKey:String, _ firstName:String, _ lastName:String, _ mapString:String, _ mediaURL:String, _ latitude: Double, _ longitude: Double, completionHandlerForPostLocation: @escaping(_ results:AnyObject?, _ error:String?)-> Void) {
         
-        let reachability = Reachability()!
         
-        reachability.whenReachable = { reachability in
-            performUIUpdatesOnMain {
-                if reachability.isReachableViaWiFi {
-                    let httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}"
-                    
-                    let _ = self.taskForPost(Parse.PARSE.BASEURL, httpBody) { (results, error) in
-                        if let _ = results?["error"] as? [String:AnyObject] {
-                            completionHandlerForPostLocation(nil, "Error posting location")
-                        } else {
-                            completionHandlerForPostLocation(results, nil)
-                        }
-                    }
-                } else {
-                    
-                }
-            }
-        }
-        reachability.whenUnreachable = { reachability in
-            performUIUpdatesOnMain {
-                completionHandlerForPostLocation(nil, "Lost of internet connection")
-            }
-        }
         
-        do {
-            try reachability.startNotifier()
-        } catch {
-            print("Unable to start notifier")
+        let httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}"
+        
+        let _ = self.taskForPost(Parse.PARSE.BASEURL, httpBody) { (results, error) in
+            if let _ = results?["error"] as? [String:AnyObject] {
+                completionHandlerForPostLocation(nil, "Error posting location")
+            } else {
+                completionHandlerForPostLocation(results, nil)
+            }
+            
         }
     }
 }
-

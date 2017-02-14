@@ -11,41 +11,41 @@ import SafariServices
 import ReachabilitySwift
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
-
+    
     let reachability = Reachability()!
     
     @IBOutlet weak var debugTextLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-   
+    
     
     let loginSave = UserDefaults.standard
     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       self.passwordField.delegate = self
-       self.emailField.delegate = self
-       self.activity.layer.cornerRadius = 10
-       self.activity.frame = activity.frame.insetBy(dx: -10, dy: -10)
-       self.activity.center = self.view.center
-       self.activity.tag = 1001
-       self.view.addSubview(activity)
+        self.passwordField.delegate = self
+        self.emailField.delegate = self
+        self.activity.layer.cornerRadius = 10
+        self.activity.frame = activity.frame.insetBy(dx: -10, dy: -10)
+        self.activity.center = self.view.center
+        self.activity.tag = 1001
+        self.view.addSubview(activity)
         
-//        reachability.whenUnreachable = { reachability in
-//        
-//            performUIUpdatesOnMain {
-//                print("Not reachable")
-//            }
-//        }
-//        
-//        do {
-//            try reachability.startNotifier()
-//            print("yes")
-//        } catch {
-//            print("Unable to start notifier")
-//        }
-}
+        //        reachability.whenUnreachable = { reachability in
+        //
+        //            performUIUpdatesOnMain {
+        //                print("Not reachable")
+        //            }
+        //        }
+        //
+        //        do {
+        //            try reachability.startNotifier()
+        //            print("yes")
+        //        } catch {
+        //            print("Unable to start notifier")
+        //        }
+    }
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,14 +54,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailField.text = ""
         
         subscribeToKeyboardNotifications()
-
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
-
+        
     }
     
     
@@ -80,23 +80,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         let email = emailField.text, password = passwordField.text
-
         
-    UdacityClient.sharedInstance().authenticateWithEmail(email!, password!) { (sucess, errorString, userID) in
+        if reachability.currentReachabilityStatus == .notReachable {
             performUIUpdatesOnMain {
-                if sucess {
-                    self.activity.stopAnimating()
-                    self.performSegue(withIdentifier: "loginToMain", sender: self)
-                    self.loginSave.set(true, forKey: "loggedIn")
-                    
-                } else {
+                self.activity.stopAnimating()
+                alert("Lost of internet connection", "Try again", self)
+            }
+        } else {
+            
+            UdacityClient.sharedInstance().authenticateWithEmail(email!, password!) { (sucess, errorString, userID) in
+                performUIUpdatesOnMain {
+                    if sucess {
+                        self.activity.stopAnimating()
+                        self.performSegue(withIdentifier: "loginToMain", sender: self)
+                        self.loginSave.set(true, forKey: "loggedIn")
+                        
+                    } else {
                         self.activity.stopAnimating()
                         alert(errorString!, "Try again", self)
+                    }
+                    
                 }
-
             }
         }
-        
     }
     
     @IBAction func signupButtonTouched(_ sender: Any) {
@@ -142,12 +148,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return 0
         }
     }
-
+    
     
     func displayError(_ errorString: String?) {
         if let errorString = errorString {
             debugTextLabel.text = errorString
         }
     }
-
+    
 }

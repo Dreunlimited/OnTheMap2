@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import ReachabilitySwift
 
 class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var postButton: UIBarButtonItem!
@@ -18,6 +19,7 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
     @IBOutlet weak var mapview: MKMapView!
     var lat:Double? = nil
     var long:Double? = nil
+    let reachability = Reachability()!
     
     let activity = UIActivityIndicatorView(activityIndicatorStyle:.gray)
     
@@ -83,38 +85,47 @@ class PinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegat
     
     @IBAction func postButton(_ sender: Any) {
         performUIUpdatesOnMain {
-        self.activity.startAnimating()
+            self.activity.startAnimating()
         }
         
-        UdacityClient.sharedInstance().getUserProfile { (sucess, results, error) in
-            
-             if sucess {
-                
-                let first = results!["first_name"] as! String
-                let last = results!["last_name"] as! String
-                
-                ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
-                    performUIUpdatesOnMain {
-                        if error != nil {
-                            alert(error!, "Try again", self)
-                        } else {
-                            self.activity.stopAnimating()
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                })
-
-             } else {
-                performUIUpdatesOnMain {
-                    self.activity.stopAnimating()
-                    alert(error!, "Try again", self)
-                }
-
+        if reachability.currentReachabilityStatus == .notReachable {
+            performUIUpdatesOnMain {
+                self.activity.stopAnimating()
+                alert("There was a lost in internet connection", "Try again", self)
             }
-            
+        } else {
+            UdacityClient.sharedInstance().getUserProfile { (sucess, results, error) in
+                
+                
+                if sucess {
+                    
+                    let first = results!["first_name"] as! String
+                    let last = results!["last_name"] as! String
+                    
+                    ParseClient.sharedInstance().postStudentLocation("12", first, last, self.addressField.text!, self.mediaURL.text!, self.lat!, self.long!, completionHandlerForPostLocation: { (results, error) in
+                        performUIUpdatesOnMain {
+                            if error != nil {
+                                alert(error!, "Try again", self)
+                            } else {
+                                self.activity.stopAnimating()
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                        }
+                    })
+                    
+                } else {
+                    performUIUpdatesOnMain {
+                        self.activity.stopAnimating()
+                        alert(error!, "Try again", self)
+                    }
+                    
+                }
+                
+            }
         }
         
     }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
